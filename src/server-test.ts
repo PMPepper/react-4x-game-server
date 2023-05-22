@@ -19,8 +19,10 @@ export default async function serverTest() {
             }
         }
 
-        const transport = new WebSocketTransport<typeof exposeMethods, {shout: (string) => string}>(ws as any);//WS websockets are slightly different to 'real' websockets in their type definitions, just enough to upset TS
-        const connector = new AsyncConnection<{shout: (string) => string}, typeof exposeMethods>(transport, exposeMethods);
+        type RemoteMethods = {shout: (string: string) => string};
+
+        const transport = new WebSocketTransport<RemoteMethods>(ws as any);//WS websockets are slightly different to 'real' websockets in their type definitions, just enough to upset TS
+        const connector = new AsyncConnection<RemoteMethods, typeof exposeMethods>(transport, exposeMethods);
 
         await connector.isReady;
 
